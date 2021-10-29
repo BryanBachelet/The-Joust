@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class Player_Move : MonoBehaviour
 {
@@ -19,20 +20,29 @@ public class Player_Move : MonoBehaviour
     public Vector2 InputDirection;
     public int direction; // 0 = Left; 1 = Right
     public bool grounded = false;
+    public bool isJumped = false;
     // Start is called before the first frame update
     void Start()
     {
         canvasUsed = GameObject.Find("Canvas");
         myRB2D = gameObject.GetComponent<Rigidbody2D>();
-        Player_Control = new PlayerAction();
-
-        Player_Control.KeyBoard.Jump.performed += _ => Jump();
-        Player_Control.KeyBoard.Movement.performed += ctx => InputDirection = ctx.ReadValue<Vector2>();
-        Player_Control.KeyBoard.Movement.canceled += ctx => InputDirection = Vector2.zero;
+   
         coroutine = WaitAndPrint(2.0f, null);
-        Player_Control.Enable();
-
+        
     }
+
+    public void onMove(InputAction.CallbackContext context)
+    {
+        InputDirection = context.ReadValue<Vector2>();
+    }
+
+    public void onJump(InputAction.CallbackContext context)
+    {
+        //isJumped  = context.ReadValue<bool>();
+      isJumped = context.action.triggered;
+    }
+
+
 
     // Update is called once per frame
     void Update()
@@ -40,6 +50,12 @@ public class Player_Move : MonoBehaviour
         if(grounded)
         {
             Mouvement();
+        }
+        
+        if(isJumped)
+        {
+            Jump();
+            isJumped = false;
         }
 
     }
