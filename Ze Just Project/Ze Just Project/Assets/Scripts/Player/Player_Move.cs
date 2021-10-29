@@ -65,7 +65,7 @@ public class Player_Move : MonoBehaviour
         {
             Vector3 center = this.GetComponent<Collider2D>().bounds.center;
 
-            Debug.Log((collision.transform.position.y + collision.collider.bounds.extents.y) + "//" + (center.y - transform.position.y));
+          //  Debug.Log((collision.transform.position.y + collision.collider.bounds.extents.y) + "//" + (center.y - transform.position.y));
         }
     }
 
