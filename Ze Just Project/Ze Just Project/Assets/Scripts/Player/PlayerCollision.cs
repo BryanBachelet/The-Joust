@@ -52,26 +52,29 @@ public class PlayerCollision : MonoBehaviour
         if (normalContact.y == -1)
         {
             directionContact = DirectionContact.DOWN;
-            if (!player_Move.grounded)
-            {
-                player_Move.ReturnForce(normalContact);
-            }
+            player_Move.ReturnForce(normalContact,0.5f);
+
 
         }
         if (normalContact.x == 1)
         {
             directionContact = DirectionContact.RIGHT;
+            player_Move.grounded = false;
             if (!player_Move.grounded)
             {
-                player_Move.ReturnForce(normalContact);
+                player_Move.ReturnForce(normalContact,1);
+
+                //Debug.Break();
             }
         }
         if (normalContact.x == -1)
         {
+            player_Move.grounded = false;
             directionContact = DirectionContact.LEFT;
             if (!player_Move.grounded)
             {
-                player_Move.ReturnForce(normalContact);
+                player_Move.ReturnForce(normalContact,1);
+
             }
 
         }

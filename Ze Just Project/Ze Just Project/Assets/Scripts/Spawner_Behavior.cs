@@ -36,6 +36,7 @@ public class Spawner_Behavior : MonoBehaviour
             else
             {
                 InstantiateMob();
+                mobRemaining--;
             }
         }
     }

@@ -258,8 +258,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   direction: 0
   myRB2D: {fileID: 415849021343191324}
-  speed: 2
+  speed: 10
   tempsAvantProchainSaut: 1
-  tempsMaxEntreSaut: 1.5
+  tempsMaxEntreSaut: 1
   tempsEcouleSaut: 0
   jumpForce: 5
+  forceReturn: 3
+  myBody: {fileID: 415849020133183847}
+  directionContact: 4

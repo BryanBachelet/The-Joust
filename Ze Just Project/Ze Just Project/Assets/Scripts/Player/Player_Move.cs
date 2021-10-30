@@ -23,10 +23,18 @@ public class Player_Move : MonoBehaviour
     public bool isJumped = false;
     public LayerMask layerMask;
     public float forceReturn = 3;
+    public GameObject oeufPrefab;
+    public float forceProjectionOeuf;
+
+    public Animator myAnimator;
+    public static int indexPlayer;
     // Start is called before the first frame update
     void Start()
     {
+        indexPlayer++;
+        myAnimator = GetComponentInChildren<Animator>();
         canvasUsed = GameObject.Find("Canvas");
+        Camera.main.GetComponent<Manager_Score>().playerScript.Add(this.GetComponent<Player_Move>());
         myRB2D = gameObject.GetComponent<Rigidbody2D>();
 
         coroutine = WaitAndPrint(2.0f, null);
@@ -60,14 +68,25 @@ public class Player_Move : MonoBehaviour
         }
         else
         {
-            Debug.DrawRay(transform.position, Vector2.down * 0.36f,Color.red);
-            if (Physics2D.Raycast(transform.position, Vector2.down, 0.36f, layerMask))
+            Debug.DrawRay(transform.position, Vector2.down * 0.40f,Color.red);
+            if (Physics2D.Raycast(transform.position, Vector2.down, 0.40f, layerMask))
             {
+                if (myAnimator.GetBool("Flying") == true)
+                {
+                    myAnimator.SetBool("Flying", false);
+                }
                 grounded = true;
             }
 
         }
-        
+        if(transform.position.x > 6.95f)
+        {
+            transform.position = new Vector3(-6.90f, transform.position.y, transform.position.z);
+        }
+        if (transform.position.x < -6.95f)
+        {
+            transform.position = new Vector3(6.90f, transform.position.y, transform.position.z);
+        }
 
     }
 
@@ -94,6 +113,18 @@ public class Player_Move : MonoBehaviour
 
             //  Debug.Log((collision.transform.position.y + collision.collider.bounds.extents.y) + "//" + (center.y - transform.position.y));
         }
+        if(collision.gameObject.tag == "Mob")
+        {
+            if(transform.position.y > collision.transform.position.y)
+            {
+                GameObject oeufInstant = Instantiate(oeufPrefab, collision.transform.position, Quaternion.identity);
+                Vector2 rndDir = Random.insideUnitCircle * 1;
+                oeufInstant.GetComponent<Rigidbody2D>().AddForce(rndDir * forceProjectionOeuf, ForceMode2D.Impulse);
+                Destroy(collision.gameObject);
+
+
+            }
+        }
     }
 
     public void Mouvement()
@@ -112,6 +143,22 @@ public class Player_Move : MonoBehaviour
             }
         }
 
+        if(myRB2D.velocity != Vector2.zero)
+        {
+            
+            if(myAnimator.GetBool("Running") == false && myAnimator.GetBool("Flying") == false )
+            {
+                myAnimator.SetBool("Running", true);
+            }
+
+        }
+        else
+        {
+            if (myAnimator.GetBool("Running") == true)
+            {
+                myAnimator.SetBool("Running", false);
+            }
+        }
         myRB2D.velocity = new Vector2(Mathf.Clamp(myRB2D.velocity.x, -5, 5), myRB2D.velocity.y);
         if (Mathf.Sign(myRB2D.velocity.x) >= 0)
         {
@@ -127,16 +174,29 @@ public class Player_Move : MonoBehaviour
     public void Jump()
     {
         myRB2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        if(myAnimator.GetBool("Flying") == false)
+        {
+            myAnimator.SetBool("Flying", true);
+            myAnimator.SetBool("Running", false);
+        }
+        else
+        {
+            myAnimator.SetBool("Flying", false);
+            myAnimator.SetBool("Flying", true);
+        }
         isJumped = false;
-        grounded = false;
+        if(!grounded)
+        {
+            grounded = true;
+        }
+        //grounded = false;
     }
 
-    public void ReturnForce(Vector2 dir)
+    public void ReturnForce(Vector2 dir, float multipleBy)
     {
-        if (!grounded)
-        {
-            myRB2D.AddForce(dir.normalized  *forceReturn, ForceMode2D.Impulse);
-        }
+
+            myRB2D.AddForce(dir.normalized  * forceReturn * multipleBy, ForceMode2D.Impulse);
+
     }
     private IEnumerator WaitAndPrint(float waitTime, GameObject textToDestroy)
     {
