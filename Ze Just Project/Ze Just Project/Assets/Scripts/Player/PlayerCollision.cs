@@ -12,6 +12,13 @@ public class PlayerCollision : MonoBehaviour
 
     public DirectionContact directionContact = DirectionContact.NONE;
 
+    private Player_Move player_Move;
+
+    private void Start()
+    {
+        player_Move = this.GetComponent<Player_Move>();
+    }
+
     private void OnCollisionStay2D(Collision2D collision)
     {
 
@@ -21,47 +28,60 @@ public class PlayerCollision : MonoBehaviour
             BoxCollider2D platformCollider = collision.gameObject.GetComponent<BoxCollider2D>();
             Vector2 normalContact = collision.GetContact(0).normal;
 
-            CompareAxisCoordoonee(platformCollider, contactPosition);
+            // CompareAxisCoordoonee(platformCollider, contactPosition);
 
             CheckNormalContactPoint(contactPosition, normalContact);
-  
+
         }
-       
+
 
     }
 
     // Find the direction with the normal
-    void CheckNormalContactPoint(Vector2 contactPosition , Vector2 normalContact)
+    void CheckNormalContactPoint(Vector2 contactPosition, Vector2 normalContact)
     {
         Debug.Log("Debug normal " + normalContact.normalized);
         Debug.DrawRay(contactPosition, normalContact.normalized * 10.0f, Color.green);
 
-        if(normalContact.y == 1)
+        if (normalContact.y == 1)
         {
             directionContact = DirectionContact.UP;
-            return;
+
+
         }
         if (normalContact.y == -1)
         {
             directionContact = DirectionContact.DOWN;
-            return;
+            if (!player_Move.grounded)
+            {
+                player_Move.ReturnForce(normalContact);
+            }
+
         }
         if (normalContact.x == 1)
         {
             directionContact = DirectionContact.RIGHT;
-            return;
+            if (!player_Move.grounded)
+            {
+                player_Move.ReturnForce(normalContact);
+            }
         }
         if (normalContact.x == -1)
         {
             directionContact = DirectionContact.LEFT;
-            return;
+            if (!player_Move.grounded)
+            {
+                player_Move.ReturnForce(normalContact);
+            }
+
         }
-        directionContact = DirectionContact.NONE;
+         return;
+
 
     }
 
     // Find the direction by comparing coordonate 
-    void CompareAxisCoordoonee(BoxCollider2D platformCollider , Vector2 contactPosition)
+    void CompareAxisCoordoonee(BoxCollider2D platformCollider, Vector2 contactPosition)
     {
         Debug.Log("Contact Point = " + contactPosition);
         float higherPoint = platformCollider.bounds.center.y + platformCollider.bounds.extents.y;

@@ -19,16 +19,18 @@ public class Player_Move : MonoBehaviour
     public PlayerAction Player_Control;
     public Vector2 InputDirection;
     public int direction; // 0 = Left; 1 = Right
-    public bool grounded = false;
+    public bool grounded = true;
     public bool isJumped = false;
+    public LayerMask layerMask;
+    public float forceReturn = 3;
     // Start is called before the first frame update
     void Start()
     {
         canvasUsed = GameObject.Find("Canvas");
         myRB2D = gameObject.GetComponent<Rigidbody2D>();
-   
+
         coroutine = WaitAndPrint(2.0f, null);
-        
+
     }
 
     public void onMove(InputAction.CallbackContext context)
@@ -39,24 +41,33 @@ public class Player_Move : MonoBehaviour
     public void onJump(InputAction.CallbackContext context)
     {
         //isJumped  = context.ReadValue<bool>();
-      isJumped = context.action.triggered;
+        isJumped = context.action.triggered;
     }
 
 
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        if(grounded)
+        if (grounded)
         {
             Mouvement();
         }
-        
-        if(isJumped)
+
+        if (isJumped)
         {
             Jump();
-            isJumped = false;
         }
+        else
+        {
+            Debug.DrawRay(transform.position, Vector2.down * 0.36f,Color.red);
+            if (Physics2D.Raycast(transform.position, Vector2.down, 0.36f, layerMask))
+            {
+                grounded = true;
+            }
+
+        }
+        
 
     }
 
@@ -77,11 +88,11 @@ public class Player_Move : MonoBehaviour
             StartCoroutine(coroutine);
             myScoreValue += 250;
         }
-        if(collision.gameObject.tag == "Plateform")
+        if (collision.gameObject.tag == "Plateform")
         {
             Vector3 center = this.GetComponent<Collider2D>().bounds.center;
 
-          //  Debug.Log((collision.transform.position.y + collision.collider.bounds.extents.y) + "//" + (center.y - transform.position.y));
+            //  Debug.Log((collision.transform.position.y + collision.collider.bounds.extents.y) + "//" + (center.y - transform.position.y));
         }
     }
 
@@ -100,9 +111,9 @@ public class Player_Move : MonoBehaviour
 
             }
         }
-        
+
         myRB2D.velocity = new Vector2(Mathf.Clamp(myRB2D.velocity.x, -5, 5), myRB2D.velocity.y);
-        if(Mathf.Sign(myRB2D.velocity.x) >= 0)
+        if (Mathf.Sign(myRB2D.velocity.x) >= 0)
         {
             myBody.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
@@ -110,12 +121,22 @@ public class Player_Move : MonoBehaviour
         {
             myBody.transform.rotation = Quaternion.Euler(0, 180, 0);
         }
-        //Mathf.Clamp
+        
     }
 
     public void Jump()
     {
         myRB2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        isJumped = false;
+        grounded = false;
+    }
+
+    public void ReturnForce(Vector2 dir)
+    {
+        if (!grounded)
+        {
+            myRB2D.AddForce(dir.normalized  *forceReturn, ForceMode2D.Impulse);
+        }
     }
     private IEnumerator WaitAndPrint(float waitTime, GameObject textToDestroy)
     {
@@ -125,7 +146,7 @@ public class Player_Move : MonoBehaviour
 
     public void ChangeDirection()
     {
-        if(direction == 0)
+        if (direction == 0)
         {
             direction = 1;
 
@@ -133,7 +154,7 @@ public class Player_Move : MonoBehaviour
         }
         else if (direction == 1)
         {
-            
+
             direction = 0;
 
         }

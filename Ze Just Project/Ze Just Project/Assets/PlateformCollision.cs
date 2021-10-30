@@ -41,7 +41,7 @@ public class PlateformCollision : MonoBehaviour
             if (collider.transform.position.y - centerPlayer.y > (center.y + RectHeight))
             {
                 collideFromTop = true;
-                collision.gameObject.GetComponent<Player_Move>().grounded = true;
+              ///  collision.gameObject.GetComponent<Player_Move>().grounded = true;
                 Debug.Log("FromMyTop");
 
             }
