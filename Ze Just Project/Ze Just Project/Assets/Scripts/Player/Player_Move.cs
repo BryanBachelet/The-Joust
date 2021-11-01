@@ -34,7 +34,7 @@ public class Player_Move : MonoBehaviour
         indexPlayer++;
         myAnimator = GetComponentInChildren<Animator>();
         canvasUsed = GameObject.Find("Canvas");
-        Camera.main.GetComponent<Manager_Score>().playerScript.Add(this.GetComponent<Player_Move>());
+        //Camera.main.GetComponent<Manager_Score>().playerScript.Add(this.GetComponent<Player_Move>());
         myRB2D = gameObject.GetComponent<Rigidbody2D>();
 
         coroutine = WaitAndPrint(2.0f, null);

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{62fe4f08-8d2d-4a8b-bfd2-e1ff58feca20}">
+		<property name="assetPath">
+			<value>RockHit.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>1</value>
+		</property>
+		<property name="length">
+			<value>0.074081632653061225</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{ce48513d-ade2-4096-b8a9-c3c3d4cd0451}</destination>
+		</relationship>
+	</object>
+</objects>

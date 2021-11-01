@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="EventFolder" id="{cce3d982-aedd-4555-972f-5fcf426348c8}">
+		<property name="name">
+			<value>Ennemi</value>
+		</property>
+		<relationship name="folder">
+			<destination>{47c7511c-6002-468b-bc7e-efe590e54884}</destination>
+		</relationship>
+	</object>
+</objects>

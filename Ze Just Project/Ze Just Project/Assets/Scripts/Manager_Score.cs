@@ -10,6 +10,7 @@ public class Manager_Score : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
        //for (int i = 0; i < playerUI.Length; i++)
        //{
        //    playerUI[i].color = playerScript[i].myColor;
