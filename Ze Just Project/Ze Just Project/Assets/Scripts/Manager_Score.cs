@@ -5,23 +5,28 @@ using UnityEngine.UI;
 
 public class Manager_Score : MonoBehaviour
 {
-    public Player_Move[] playerScript;
+    public List<Player_Move> playerScript;
     public Text[] playerUI;
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < playerUI.Length; i++)
-        {
-            playerUI[i].color = playerScript[i].myColor;
-        }
+
+       //for (int i = 0; i < playerUI.Length; i++)
+       //{
+       //    playerUI[i].color = playerScript[i].myColor;
+       //}
     }
 
     // Update is called once per frame
     void Update()
     {
-        for(int i= 0; i < playerUI.Length; i++)
+        if(playerScript.Count > 0)
         {
-            playerUI[i].text = "" +  playerScript[i].myScoreValue;
+            for (int i = 0; i < playerScript.Count; i++)
+            {
+                playerUI[i].text = "" + playerScript[i].myScoreValue;
+            }
         }
+
     }
 }

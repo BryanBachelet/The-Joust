@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="EventFolder" id="{42394f26-631b-4e64-adfa-0094939cc053}">
+		<property name="name">
+			<value>Mysc</value>
+		</property>
+		<relationship name="folder">
+			<destination>{ec5627c8-7413-434e-aa3f-08bdbde19893}</destination>
+		</relationship>
+	</object>
+</objects>
